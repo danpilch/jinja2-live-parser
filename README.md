@@ -1,5 +1,7 @@
 # Jinja2 live parser
 
+Forked from [abourguignon](https://github.com/abourguignon/jinja2-live-parser)
+
 A lightweight live parser for [Jinja2](http://jinja.pocoo.org/docs/dev/) based on [Flask](http://flask.pocoo.org/) and [Jquery](http://jquery.com/).  
 All you need is Python and preferably [pip](https://pypi.python.org/pypi/pip).  
 
