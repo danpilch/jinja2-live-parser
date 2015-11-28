@@ -2,13 +2,15 @@
 from flask import Flask, render_template, request
 from jinja2 import Template, Environment, meta
 from random import choice
+import argparse
 import json
 import yaml
+
 
 app = Flask(__name__)
 
 @app.route("/")
-def hello():
+def render():
     return render_template('index.html')
 
 
@@ -42,7 +44,17 @@ def convert():
 
     return rendered_tpl.replace('\n', '<br />')
 
+def main():
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument("-b", "--bind", help="Define IP to bind to.", default="127.0.0.1")
+    parser.add_argument("-p", "--port", type=int, help="Define Port to bind to.", default=5000)
+    parser.add_argument("-d", "--debug", help="Enable Debug.", action="store_true")
+    args = parser.parse_args()
+
+    if args.debug:
+        app.debug = True
+
+    app.run(host=args.bind, port=args.port)
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run(host="0.0.0.0")
+    main()
