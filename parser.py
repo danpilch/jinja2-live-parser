@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request
 from jinja2 import Template, Environment, meta
+from inspect import getmembers, isfunction
 from random import choice
 import argparse
 import json
 import yaml
-
+import imp
+import filters
+import os
 
 app = Flask(__name__)
 
+# Import custom filters from filters.py
+imported_filters = { name: function for name, function in getmembers(filters) if isfunction(function) }
+app.jinja_env.filters.update(imported_filters)
+
+
 @app.route("/")
 def render():
-    return render_template('index.html')
+    return render_template('index.html', all_filters = app.jinja_env.filters)
 
 
 @app.route('/convert', methods=['GET', 'POST'])
@@ -20,7 +28,7 @@ def convert():
         'Dissimile', 'Superiori', 'Laboro', 'Torquate', 'sunt', 
     ]
 
-    tpl = Template(request.form['template'])
+    tpl = app.jinja_env.from_string(request.form['template'])
     values = {}
 
     if bool(int(request.form['dummyvalues'])):
